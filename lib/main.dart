@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recasa/screens/home/home_page.dart';
 import 'package:recasa/screens/landing/bloc/connect_bloc.dart';
 import 'package:recasa/screens/landing/landing_page.dart';
 import 'package:recasa/utils/app_strings.dart';
@@ -28,7 +29,7 @@ class Recasa extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,
-        home: const LandingPage(),
+        home: const HomePage(),
       ),
     );
   }

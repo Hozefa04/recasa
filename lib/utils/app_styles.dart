@@ -18,13 +18,13 @@ class AppStyles {
   static TextStyle mediumTextStyleBold = GoogleFonts.openSans(
     color: Colors.white70,
     fontWeight: FontWeight.w600,
-    fontSize: 20,
+    fontSize: 18,
   );
 
   static TextStyle smallTextStyleBold = GoogleFonts.openSans(
     color: Colors.white70,
     fontWeight: FontWeight.bold,
-    fontSize: 16,
+    fontSize: 14,
   );
 
   static TextStyle linkTextStyleBold = GoogleFonts.openSans(

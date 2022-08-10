@@ -2,7 +2,7 @@ class AppStrings {
   //App name
   static String appName = "Recasa";
 
-  //landing images
+  // Images
   static String nftImage1 =
       "https://www.ie.edu/insights/wp-content/uploads/2022/01/San-Jose-Feature.jpg";
   static String nftImage2 =
@@ -16,10 +16,14 @@ class AppStrings {
   static String nftImage6 =
       "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/03cb35115094373.604958457214b.jpg";
 
-  //Landing page
+  // Landing page
   static String getStarted = "Get Started Now";
   static String fracInfoText = "Fractionalizing your NFTs has never been simpler";
   static String connectButton = "Connect Wallet";
   static String connectError = "There was an error connecting to the wallet";
   static String connectSuccess = "Wallet is connected";
+
+  // Home page
+  static String fracButton = "Fractionalize";
+  static String yourNft = "Your NFTs";
 }
