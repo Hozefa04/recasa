@@ -41,3 +41,10 @@ class FractionalizeFailureState extends FractionalizeState {
   @override
   List<Object> get props => [];
 }
+
+class WalletErrorState extends FractionalizeState {
+  const WalletErrorState();
+  
+  @override
+  List<Object> get props => [];
+}

@@ -117,6 +117,7 @@ class FractionalizeButton extends StatelessWidget {
     return InkWell(
       onTap: () {
         BlocProvider.of<FractionalizeBloc>(context).add(FractionalizeNFT(
+          context,
           _fractionsController.text,
           contract,
           tokenId,

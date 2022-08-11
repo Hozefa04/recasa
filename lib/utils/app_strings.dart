@@ -5,9 +5,12 @@ class AppStrings {
   //Endpoints
   static String polygonEndpoint =
       "https://polygon-mumbai.g.alchemy.com/v2/sO98lhsZy4a47VmYZ0UMqUuDV6fQoN-o";
+  static String rinkebyEndpoint =
+      "https://rinkeby.infura.io/v3/69d5cab7c60c466a9a32fbda97398af5";
 
   // Contracts
-  static String fractionalizeContractAddress = "0x22f8294d82bF1DF3f238b042aC21E6fAB18ba45C";
+  static String fractionalizeContractAddress =
+      "0x22f8294d82bF1DF3f238b042aC21E6fAB18ba45C";
 
   //Other urls
   static String webSocketUrl =
