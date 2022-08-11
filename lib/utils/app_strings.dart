@@ -2,6 +2,17 @@ class AppStrings {
   //App name
   static String appName = "Recasa";
 
+  //Endpoints
+  static String polygonEndpoint =
+      "https://polygon-mumbai.g.alchemy.com/v2/sO98lhsZy4a47VmYZ0UMqUuDV6fQoN-o";
+
+  // Contracts
+  static String fractionalizeContractAddress = "0x22f8294d82bF1DF3f238b042aC21E6fAB18ba45C";
+
+  //Other urls
+  static String webSocketUrl =
+      "wss://polygon-mumbai.g.alchemy.com/v2/sO98lhsZy4a47VmYZ0UMqUuDV6fQoN-o";
+
   // Images
   static String nftImage1 =
       "https://www.ie.edu/insights/wp-content/uploads/2022/01/San-Jose-Feature.jpg";
@@ -15,15 +26,31 @@ class AppStrings {
       "https://madnfts.io/wp-content/uploads/2022/05/0_Screenshot_20220513_162432_watermark_vie._13052022_162519.jpg";
   static String nftImage6 =
       "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/03cb35115094373.604958457214b.jpg";
+  static String brokenImage =
+      "https://finis.com.bd/wp-content/uploads/2021/07/No-Image.jpg";
 
   // Landing page
   static String getStarted = "Get Started Now";
-  static String fracInfoText = "Fractionalizing your NFTs has never been simpler";
+  static String fracInfoText =
+      "Fractionalizing your NFTs has never been simpler";
   static String connectButton = "Connect Wallet";
   static String connectError = "There was an error connecting to the wallet";
   static String connectSuccess = "Wallet is connected";
+  static String loadingText = "Please wait while we load your NFTs";
 
   // Home page
   static String fracButton = "Fractionalize";
   static String yourNft = "Your NFTs";
+  static String noName = "No Name";
+  static String noValue = "nill";
+  static String noNFTs = "You do not have any NFTs";
+
+  //Fractionalize page
+  static String appBarTitle = "Fractionalize your NFT";
+  static String quantityInput = "Enter amount of fractions";
+  static String priceInput = "Enter price in Eth";
+  static String symbolInput = "Enter token symbol";
+
+  // Widgets
+  static String defaultTextFieldHint = "Type here...";
 }

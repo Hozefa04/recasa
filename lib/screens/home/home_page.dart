@@ -1,43 +1,30 @@
+import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:recasa/screens/fractionalize/fractionalize_page.dart';
+import 'package:recasa/screens/home/bloc/home_bloc.dart';
 import 'package:recasa/utils/app_colors.dart';
 import 'package:recasa/utils/app_strings.dart';
 import 'package:recasa/utils/app_styles.dart';
 
-List<Map<String, String>> NFTData = [
-  {
-    "name": "NFT #1",
-    "description": "This is some static data",
-    "image": AppStrings.nftImage1,
-    "value": "0.47",
-  },
-  {
-    "name": "NFT #2",
-    "description": "This is some static data",
-    "image": AppStrings.nftImage2,
-    "value": "0.7",
-  },
-  {
-    "name": "NFT #3",
-    "description": "This is some static data",
-    "image": AppStrings.nftImage3,
-    "value": "0.02",
-  },
-  {
-    "name": "NFT #4",
-    "description": "This is some static data",
-    "image": AppStrings.nftImage4,
-    "value": "1.23",
-  },
-  {
-    "name": "NFT #5",
-    "description": "This is some static data",
-    "image": AppStrings.nftImage5,
-    "value": "0.87",
-  },
-];
-
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  late String address;
+
+  @override
+  void initState() {
+    // address = BlocProvider.of<ConnectBloc>(context).walletAddress!;
+    address = "0x8f4cb4272c6ac594553199c4bc42658cff66e5e1";
+
+    BlocProvider.of<HomeBloc>(context).add(LoadNFTs(address));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,15 +47,27 @@ class HomePageContent extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 12, horizontal: 22),
       child: Column(
-        children: [
-          Text(
-            AppStrings.yourNft,
-            style: AppStyles.headingStyleBold,
-          ),
-          const SizedBox(height: 12),
-          const NFTGrid(),
+        children: const [
+          SizedBox(height: 22),
+          NFTText(),
+          SizedBox(height: 22),
+          NFTGrid(),
         ],
       ),
+    );
+  }
+}
+
+class NFTText extends StatelessWidget {
+  const NFTText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      AppStrings.yourNft,
+      style: AppStyles.headingStyleBold,
     );
   }
 }
@@ -81,31 +80,103 @@ class NFTGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: GridView.builder(
-        itemCount: NFTData.length,
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          crossAxisSpacing: 14.0,
-          mainAxisSpacing: 14.0,
-          childAspectRatio: 2 / 3,
-        ),
-        itemBuilder: (context, index) {
-          return Container(
-            decoration: BoxDecoration(
-              color: AppColors.lightColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          if (state is NFTsLoading) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                NFTImage(image: NFTData[index]['image']!),
-                NFTInfo(
-                  name: NFTData[index]['name']!,
-                  value: NFTData[index]['value']!,
+                CircularProgressIndicator(
+                  color: AppColors.secondaryColor,
                 ),
-                const FractionalizeButton(),
+                const SizedBox(height: 22),
+                Text(
+                  AppStrings.loadingText,
+                  style: AppStyles.mediumTextStyleBold,
+                  textAlign: TextAlign.center,
+                ),
               ],
+            );
+          }
+          if (state is NFTsLoaded) {
+            return GridView.builder(
+              itemCount: state.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 1,
+                crossAxisSpacing: 14.0,
+                mainAxisSpacing: 22.0,
+                childAspectRatio: 2 / 1,
+              ),
+              itemBuilder: (context, index) {
+                late String imageUrl;
+                if (state.nfts[index].metadata != null &&
+                    state.nfts[index].metadata?.image != null) {
+                  if (state.nfts[index].metadata!.image!.contains("ipfs") &&
+                      !state.nfts[index].metadata!.image!.contains("gateway")) {
+                    String hash =
+                        state.nfts[index].metadata!.image!.substring(7);
+                    imageUrl = "https://cloudflare-ipfs.com/ipfs/" + hash;
+                  } else {
+                    imageUrl = state.nfts[index].metadata!.image!;
+                  }
+                } else {
+                  imageUrl = AppStrings.brokenImage;
+                }
+                return Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.lightColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      NFTImage(
+                        image: imageUrl,
+                        tag: state.nfts[index].contract.toString() +
+                            state.nfts[index].id.tokenId.toString(),
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 12, horizontal: 4),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              NFTInfo(
+                                name: state.nfts[index].title ??
+                                    AppStrings.noName,
+                                value: state.nfts[index].balance ??
+                                    AppStrings.noValue,
+                              ),
+                              FractionalizeButton(
+                                nft: state.nfts[index],
+                                imageUrl: imageUrl,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+          if (state is EmptyNFTs) {
+            return Center(
+              child: Text(
+                AppStrings.noNFTs,
+                style: AppStyles.mediumTextStyleBold,
+              ),
+            );
+          }
+          return Center(
+            child: CircularProgressIndicator(
+              color: AppColors.secondaryColor,
             ),
           );
         },
@@ -115,14 +186,22 @@ class NFTGrid extends StatelessWidget {
 }
 
 class FractionalizeButton extends StatelessWidget {
+  final EnhancedNFT nft;
+  final String imageUrl;
   const FractionalizeButton({
     Key? key,
+    required this.nft,
+    required this.imageUrl,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => FractionalizePage(nft: nft, imageUrl: imageUrl),
+        ));
+      },
       child: Container(
         width: double.infinity,
         margin: const EdgeInsets.all(6),
@@ -154,23 +233,19 @@ class NFTInfo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            flex: 2,
-            child: Text(
-              name,
-              style: AppStyles.mediumTextStyleBold,
-            ),
+          Text(
+            name,
+            style: AppStyles.smallTextStyleBold,
+            overflow: TextOverflow.ellipsis,
           ),
-          Expanded(
-            flex: 1,
-            child: Text(
-              "⟠ " + value,
-              style: AppStyles.smallTextStyleBold,
-            ),
+          Text(
+            "Owned: " + value,
+            style: AppStyles.smallTextStyleBold,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),
@@ -180,24 +255,53 @@ class NFTInfo extends StatelessWidget {
 
 class NFTImage extends StatelessWidget {
   final String image;
+  final String tag;
   const NFTImage({
     Key? key,
     required this.image,
+    required this.tag,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: const BorderRadius.only(
-        topLeft: Radius.circular(12),
-        topRight: Radius.circular(12),
-      ),
-      child: SizedBox(
-        height: 122,
-        width: double.infinity,
-        child: Image.network(
-          image,
-          fit: BoxFit.cover,
+    return Expanded(
+      flex: 1,
+      child: ClipRRect(
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(12),
+          bottomLeft: Radius.circular(12),
+        ),
+        child: SizedBox(
+          height: double.infinity,
+          width: double.infinity,
+          child: Hero(
+            tag: tag,
+            child: Image.network(
+              image,
+              fit: BoxFit.cover,
+              loadingBuilder: (BuildContext context, Widget child,
+                  ImageChunkEvent? loadingProgress) {
+                if (loadingProgress == null) return child;
+                return Center(
+                  child: CircularProgressIndicator(
+                    color: AppColors.secondaryColor,
+                    value: loadingProgress.expectedTotalBytes != null
+                        ? loadingProgress.cumulativeBytesLoaded /
+                            loadingProgress.expectedTotalBytes!
+                        : null,
+                  ),
+                );
+              },
+              errorBuilder: (context, exception, stackTrace) {
+                return Center(
+                  child: Text(
+                    '😢',
+                    style: AppStyles.mediumTextStyleBold,
+                  ),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );

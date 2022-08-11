@@ -51,9 +51,9 @@ class AppStyles {
     fontSize: 16,
   );
 
-  static TextStyle drawerTextStyleBold = GoogleFonts.openSans(
+  static TextStyle nftTitleStyle = GoogleFonts.openSans(
     color: Colors.white,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.bold,
     fontSize: 18,
   );
 }

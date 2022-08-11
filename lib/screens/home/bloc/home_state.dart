@@ -22,10 +22,12 @@ class NFTsLoading extends HomeState {
 }
 
 class NFTsLoaded extends HomeState {
-  const NFTsLoaded();
+  final List<EnhancedNFT> nfts;
+  final int length;
+  const NFTsLoaded(this.nfts, this.length);
   
   @override
-  List<Object> get props => [];
+  List<Object> get props => [nfts, length];
 }
 
 class EmptyNFTs extends HomeState {

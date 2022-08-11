@@ -6,3 +6,11 @@ abstract class HomeEvent extends Equatable {
   @override
   List<Object> get props => [];
 }
+
+class LoadNFTs extends HomeEvent {
+  final String address;
+  const LoadNFTs(this.address);
+
+  @override
+  List<Object> get props => [address];
+}
