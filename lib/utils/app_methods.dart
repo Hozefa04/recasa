@@ -51,10 +51,13 @@ class AppMethods {
     return contract;
   }
 
-  static Future<void> setApproval(String contractAddress) async {
+  static Future<void> setApproval(
+    String contractAddress,
+    String walletAddress,
+  ) async {
     Client httpClient = Client();
     Web3Client web3client = Web3Client(
-      AppStrings.rinkebyEndpoint,
+      AppStrings.polygonEndpoint,
       httpClient,
     );
 
@@ -62,6 +65,8 @@ class AppMethods {
 
     EthereumAddress fracContractAddress =
         EthereumAddress.fromHex(AppStrings.fractionalizeContractAddress);
+
+    EthereumAddress walletAddr = EthereumAddress.fromHex(walletAddress);
 
     EthPrivateKey credentials =
         EthPrivateKey.fromHex(dotenv.env['PRIVATE_KEY']!);
@@ -76,11 +81,92 @@ class AppMethods {
     final result = await web3client.sendTransaction(
       credentials,
       Transaction.callContract(
+        from: walletAddr,
         contract: contract,
         function: ethFunction,
         parameters: [fracContractAddress, true],
       ),
-      chainId: 4,
+      chainId: 80001,
+    );
+
+    debugPrint("Result: " + result.toString());
+  }
+
+  static Future<void> transferMainToken(
+    String address,
+    BigInt tokenId,
+    String walletAddress,
+  ) async {
+    Client httpClient = Client();
+    Web3Client web3client = Web3Client(
+      AppStrings.polygonEndpoint,
+      httpClient,
+    );
+
+    await dotenv.load(fileName: '.env');
+
+    EthereumAddress nftContractAddress =
+        EthereumAddress.fromHex(AppStrings.fractionalizeContractAddress);
+
+    EthereumAddress walletAddr = EthereumAddress.fromHex(walletAddress);
+
+    EthPrivateKey credentials =
+        EthPrivateKey.fromHex(dotenv.env['PRIVATE_KEY']!);
+
+    DeployedContract contract = await AppMethods.loadContract(
+      contractJson: "assets/abi/fractionalize.json",
+      contractName: "FractionalizeNFT",
+      contractAddress: address,
+    );
+
+    final ethFunction = contract.function("transferMainToken");
+    final result = await web3client.sendTransaction(
+      credentials,
+      Transaction.callContract(
+        from: walletAddr,
+        contract: contract,
+        function: ethFunction,
+        parameters: [nftContractAddress, tokenId],
+      ),
+      chainId: 80001,
+    );
+
+    debugPrint("Result: " + result.toString());
+  }
+
+  static Future<void> fractionalize(
+    String walletAddress,
+    BigInt amount,
+    String uri,
+  ) async {
+    Client httpClient = Client();
+    Web3Client web3client = Web3Client(
+      AppStrings.polygonEndpoint,
+      httpClient,
+    );
+
+    await dotenv.load(fileName: '.env');
+
+    EthereumAddress ethWalletAddress = EthereumAddress.fromHex(walletAddress);
+
+    EthPrivateKey credentials =
+        EthPrivateKey.fromHex(dotenv.env['PRIVATE_KEY']!);
+
+    DeployedContract contract = await AppMethods.loadContract(
+      contractJson: "assets/abi/fractionalize.json",
+      contractName: "FractionalizeNFT",
+      contractAddress: AppStrings.fractionalizeContractAddress,
+    );
+
+    final ethFunction = contract.function("mint");
+    final result = await web3client.sendTransaction(
+      credentials,
+      Transaction.callContract(
+        contract: contract,
+        function: ethFunction,
+        parameters: [ethWalletAddress, amount, uri],
+      ),
+      chainId: 80001,
     );
 
     debugPrint("Result: " + result.toString());

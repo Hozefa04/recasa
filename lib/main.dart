@@ -33,7 +33,7 @@ class Recasa extends StatelessWidget {
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         title: AppStrings.appName,
-        home: const HomePage(),
+        home: const LandingPage(),
       ),
     );
   }

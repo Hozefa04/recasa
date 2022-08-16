@@ -21,8 +21,8 @@ class SetApprovalState extends FractionalizeState {
   List<Object> get props => [];
 }
 
-class InitializationState extends FractionalizeState {
-  const InitializationState();
+class FractionalizationState extends FractionalizeState {
+  const FractionalizationState();
   
   @override
   List<Object> get props => [];
@@ -44,6 +44,13 @@ class FractionalizeFailureState extends FractionalizeState {
 
 class WalletErrorState extends FractionalizeState {
   const WalletErrorState();
+  
+  @override
+  List<Object> get props => [];
+}
+
+class TransferTokenState extends FractionalizeState {
+  const TransferTokenState();
   
   @override
   List<Object> get props => [];

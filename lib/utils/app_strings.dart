@@ -10,7 +10,7 @@ class AppStrings {
 
   // Contracts
   static String fractionalizeContractAddress =
-      "0x22f8294d82bF1DF3f238b042aC21E6fAB18ba45C";
+      "0x57197Bdc4ad36DFb4f22849dD5a2b437CD02192a";
 
   //Other urls
   static String webSocketUrl =

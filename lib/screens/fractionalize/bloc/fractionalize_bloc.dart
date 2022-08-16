@@ -18,14 +18,39 @@ class FractionalizeBloc extends Bloc<FractionalizeEvent, FractionalizeState> {
   Future<void> _fractionalize(
       FractionalizeNFT event, Emitter<FractionalizeState> emit) async {
     emit(const SetApprovalState());
-    // walletAddress = BlocProvider.of<ConnectBloc>(event.context).walletAddress;
-    walletAddress = "0x8f4cb4272c6ac594553199c4bc42658cff66e5e1";
+    walletAddress = BlocProvider.of<ConnectBloc>(event.context).walletAddress;
+    // walletAddress = "0x8F4cb4272c6AC594553199c4bc42658cFF66E5E1";
     if (walletAddress != null) {
-      // await AppMethods.setApproval(event.contract);
       try {
-        await AppMethods.setApproval(event.contract);
+        // await AppMethods.setApproval(event.contract, walletAddress!);
+        // try {
+        //   emit(const TransferTokenState());
+        //   await AppMethods.transferMainToken(
+        //     event.contract,
+        //     BigInt.from(int.parse(event.tokenId)),
+        //     walletAddress!,
+        //   );
+        //   try {
+        //     emit(const FractionalizationState());
+        //     await AppMethods.fractionalize(
+        //       BlocProvider.of<ConnectBloc>(event.context).walletAddress!,
+        //       BigInt.from(int.parse(event.fractions)),
+        //       event.uri,
+        //     );
+        //   } catch (e) {
+        //     debugPrint("Mint error: " + e.toString());
+        //   }
+        // } catch (e) {
+        //   debugPrint("Transfer error: " + e.toString());
+        // }
+        emit(const FractionalizationState());
+        await AppMethods.fractionalize(
+          BlocProvider.of<ConnectBloc>(event.context).walletAddress!,
+          BigInt.from(int.parse(event.fractions)),
+          event.uri,
+        );
       } catch (e) {
-        debugPrint("Fractionalize error: " + e.toString());
+        debugPrint("Approval error: " + e.toString());
         emit(const FractionalizeFailureState());
       }
     } else {

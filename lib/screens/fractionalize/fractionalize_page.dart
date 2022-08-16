@@ -83,15 +83,16 @@ class FractionalizeContent extends StatelessWidget {
                   // CustomTextField(
                   //   hintText: AppStrings.priceInput,
                   // ),
-                  const SizedBox(height: 22),
-                  CustomTextField(
-                    hintText: AppStrings.symbolInput,
-                    controller: _symbolController,
-                  ),
+                  // const SizedBox(height: 22),
+                  // CustomTextField(
+                  //   hintText: AppStrings.symbolInput,
+                  //   controller: _symbolController,
+                  // ),
                   const SizedBox(height: 22),
                   FractionalizeButton(
                     contract: nft.contract.address,
                     tokenId: nft.id.tokenId,
+                    uri: nft.tokenUri!.raw,
                   ),
                 ],
               ),
@@ -106,10 +107,12 @@ class FractionalizeContent extends StatelessWidget {
 class FractionalizeButton extends StatelessWidget {
   final String contract;
   final String tokenId;
+  final String uri;
   const FractionalizeButton({
     Key? key,
     required this.contract,
     required this.tokenId,
+    required this.uri,
   }) : super(key: key);
 
   @override
@@ -121,6 +124,7 @@ class FractionalizeButton extends StatelessWidget {
           _fractionsController.text,
           contract,
           tokenId,
+          uri,
         ));
       },
       child: Container(

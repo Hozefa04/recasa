@@ -7,6 +7,8 @@ import 'package:recasa/utils/app_colors.dart';
 import 'package:recasa/utils/app_strings.dart';
 import 'package:recasa/utils/app_styles.dart';
 
+import '../landing/bloc/connect_bloc.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -19,8 +21,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    // address = BlocProvider.of<ConnectBloc>(context).walletAddress!;
-    address = "0x8f4cb4272c6ac594553199c4bc42658cff66e5e1";
+    address = BlocProvider.of<ConnectBloc>(context).walletAddress!;
+    // address = "0x8F4cb4272c6AC594553199c4bc42658cFF66E5E1";
 
     BlocProvider.of<HomeBloc>(context).add(LoadNFTs(address));
     super.initState();
