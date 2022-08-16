@@ -1,0 +1,59 @@
+class AppStrings {
+  //App name
+  static String appName = "Recasa";
+
+  //Endpoints
+  static String polygonEndpoint =
+      "https://polygon-mumbai.g.alchemy.com/v2/sO98lhsZy4a47VmYZ0UMqUuDV6fQoN-o";
+  static String rinkebyEndpoint =
+      "https://rinkeby.infura.io/v3/69d5cab7c60c466a9a32fbda97398af5";
+
+  // Contracts
+  static String fractionalizeContractAddress =
+      "0x57197Bdc4ad36DFb4f22849dD5a2b437CD02192a";
+
+  //Other urls
+  static String webSocketUrl =
+      "wss://polygon-mumbai.g.alchemy.com/v2/sO98lhsZy4a47VmYZ0UMqUuDV6fQoN-o";
+
+  // Images
+  static String nftImage1 =
+      "https://www.ie.edu/insights/wp-content/uploads/2022/01/San-Jose-Feature.jpg";
+  static String nftImage2 =
+      "https://madnfts.io/wp-content/uploads/2022/05/0_Screenshot_20220516_111424_watermark_lun._16052022_111559.jpg";
+  static String nftImage3 =
+      "https://lh4.googleusercontent.com/OcFDSA9mAfc1Xr4lebHFrJguF7WkGPLKoeuQwzHZ23z5qek_4lnX35GygIqTCvBSFcW7xNYBlc-OgTmZxIm6uRsuEIJVPq49SyXeA5l-uLeS_1RrI-1UqHv_Pd13aC2tzwHQVJt6";
+  static String nftImage4 =
+      "https://public.nftstatic.com/static/nft/zipped/b3024715b42d46439361283152601c86_zipped.png";
+  static String nftImage5 =
+      "https://madnfts.io/wp-content/uploads/2022/05/0_Screenshot_20220513_162432_watermark_vie._13052022_162519.jpg";
+  static String nftImage6 =
+      "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/03cb35115094373.604958457214b.jpg";
+  static String brokenImage =
+      "https://finis.com.bd/wp-content/uploads/2021/07/No-Image.jpg";
+
+  // Landing page
+  static String getStarted = "Get Started Now";
+  static String fracInfoText =
+      "Fractionalizing your NFTs has never been simpler";
+  static String connectButton = "Connect Wallet";
+  static String connectError = "There was an error connecting to the wallet";
+  static String connectSuccess = "Wallet is connected";
+  static String loadingText = "Please wait while we load your NFTs";
+
+  // Home page
+  static String fracButton = "Fractionalize";
+  static String yourNft = "Your NFTs";
+  static String noName = "No Name";
+  static String noValue = "nill";
+  static String noNFTs = "You do not have any NFTs";
+
+  //Fractionalize page
+  static String appBarTitle = "Fractionalize your NFT";
+  static String quantityInput = "Enter amount of fractions";
+  static String priceInput = "Enter price in Eth";
+  static String symbolInput = "Enter token symbol";
+
+  // Widgets
+  static String defaultTextFieldHint = "Type here...";
+}
