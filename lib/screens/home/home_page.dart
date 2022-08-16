@@ -153,6 +153,9 @@ class NFTGrid extends StatelessWidget {
                                     AppStrings.noName,
                                 value: state.nfts[index].balance ??
                                     AppStrings.noValue,
+                                standard: state.nfts[index].id.tokenMetadata
+                                        ?.tokenType ??
+                                    "Unknown",
                               ),
                               FractionalizeButton(
                                 nft: state.nfts[index],
@@ -225,10 +228,12 @@ class FractionalizeButton extends StatelessWidget {
 class NFTInfo extends StatelessWidget {
   final String name;
   final String value;
+  final String standard;
   const NFTInfo({
     Key? key,
     required this.name,
     required this.value,
+    required this.standard,
   }) : super(key: key);
 
   @override
@@ -246,6 +251,11 @@ class NFTInfo extends StatelessWidget {
           ),
           Text(
             "Owned: " + value,
+            style: AppStyles.smallTextStyleBold,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            standard,
             style: AppStyles.smallTextStyleBold,
             overflow: TextOverflow.ellipsis,
           ),

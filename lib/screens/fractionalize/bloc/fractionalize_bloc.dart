@@ -43,6 +43,7 @@ class FractionalizeBloc extends Bloc<FractionalizeEvent, FractionalizeState> {
         // } catch (e) {
         //   debugPrint("Transfer error: " + e.toString());
         // }
+
         emit(const FractionalizationState());
         await AppMethods.fractionalize(
           BlocProvider.of<ConnectBloc>(event.context).walletAddress!,
