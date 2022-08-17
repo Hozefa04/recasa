@@ -18,7 +18,7 @@ class AppStrings {
 
   // Images
   static String nftImage1 =
-      "https://www.ie.edu/insights/wp-content/uploads/2022/01/San-Jose-Feature.jpg";
+      "https://madnfts.io/wp-content/uploads/2022/05/0_Screenshot_20220513_162432_watermark_vie._13052022_162519.jpg";
   static String nftImage2 =
       "https://madnfts.io/wp-content/uploads/2022/05/0_Screenshot_20220516_111424_watermark_lun._16052022_111559.jpg";
   static String nftImage3 =
@@ -40,6 +40,8 @@ class AppStrings {
   static String connectError = "There was an error connecting to the wallet";
   static String connectSuccess = "Wallet is connected";
   static String loadingText = "Please wait while we load your NFTs";
+  static String walletError = "There was an error connecting with the wallet";
+  static String walletConnected = "Wallet connected successfully";
 
   // Home page
   static String fracButton = "Fractionalize";
