@@ -50,18 +50,18 @@ class AppStrings {
   static String noName = "No Name";
   static String noValue = "nill";
   static String noNFTs = "You do not have any NFTs";
-
-  //Fractionalize page
-  static String appBarTitle = "Fractionalize your NFT";
-  static String quantityInput = "Enter amount of fractions";
-  static String priceInput = "Enter price in Eth";
-  static String symbolInput = "Enter token symbol";
   static String NFTFetchError =
       "There was an error fetching your NFTs. Please try again later...";
 
   // Recasa page
   static String viewButton = "View On OpenSea";
   static String appBarRecasa = "Your Recasa NFTs";
+
+  //Fractionalize page
+  static String fractionalizeTitle = "Fractionalize your NFT";
+  static String quantityInput = "Enter amount of fractions";
+  static String priceInput = "Enter price in Eth";
+  static String symbolInput = "Enter token symbol";
 
   // Widgets
   static String defaultTextFieldHint = "Type here...";

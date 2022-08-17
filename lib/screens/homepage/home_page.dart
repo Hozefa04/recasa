@@ -2,15 +2,15 @@ import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web3/flutter_web3.dart';
+import 'package:recasa/screens/fractionalize/fractionalize_page.dart';
 import 'package:recasa/screens/homepage/bloc/home_bloc.dart';
 import 'package:recasa/screens/recasa/recasa_page.dart';
 import 'package:recasa/utils/app_colors.dart';
 import 'package:recasa/utils/app_extras.dart';
 import 'package:recasa/utils/app_strings.dart';
 import 'package:recasa/utils/app_styles.dart';
-
-import '../../widgets/fractionalize_button.dart';
 import '../../widgets/nft_image.dart';
+import '../../widgets/nft_info.dart';
 import '../landing/bloc/connect_bloc.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
 
     // Subscribe to `accountsChanged` event.
     ethereum!.onAccountsChanged((accounts) {
+      BlocProvider.of<ConnectBloc>(context).setAddress = accounts[0];
       BlocProvider.of<HomeBloc>(context).add(LoadNFTs(accounts[0]));
     });
 
@@ -288,7 +289,15 @@ class FractionalizeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        AppExtras.push(
+          context,
+          FractionalizePage(
+            nft: nft,
+            imageUrl: imageUrl,
+          ),
+        );
+      },
       child: Container(
         width: double.infinity,
         margin: const EdgeInsets.all(6),

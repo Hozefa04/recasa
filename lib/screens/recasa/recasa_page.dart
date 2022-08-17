@@ -7,9 +7,8 @@ import 'package:recasa/utils/app_colors.dart';
 import 'package:recasa/utils/app_methods.dart';
 import 'package:recasa/utils/app_strings.dart';
 import 'package:recasa/utils/app_styles.dart';
-
-import '../../widgets/fractionalize_button.dart';
 import '../../widgets/nft_image.dart';
+import '../../widgets/nft_info.dart';
 import '../landing/bloc/connect_bloc.dart';
 
 class RecasaNFTPage extends StatefulWidget {

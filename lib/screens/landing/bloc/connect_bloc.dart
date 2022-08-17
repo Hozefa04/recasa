@@ -11,6 +11,7 @@ class ConnectBloc extends Bloc<ConnectEvent, ConnectState> {
   int? chainId;
 
   String? get walletAddress => address;
+  set setAddress(String walletAddress) => address = walletAddress;
 
   ConnectBloc() : super(const ConnectInitial()) {
     on<ConnectWallet>((event, emit) async => _connectWallet(event, emit));
