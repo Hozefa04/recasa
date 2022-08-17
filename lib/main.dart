@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recasa/screens/homepage/bloc/home_bloc.dart';
+import 'package:recasa/screens/recasa/bloc/recasa_bloc.dart';
 import 'package:recasa/utils/app_strings.dart';
 
 import 'bloc/observer.dart';
@@ -26,6 +27,7 @@ class Recasa extends StatelessWidget {
       providers: [
         BlocProvider(create: (context) => ConnectBloc()),
         BlocProvider(create: (context) => HomeBloc()),
+        BlocProvider(create: (context) => RecasaBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

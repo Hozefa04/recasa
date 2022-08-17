@@ -15,6 +15,7 @@ class AppStrings {
   //Other urls
   static String webSocketUrl =
       "wss://polygon-mumbai.g.alchemy.com/v2/sO98lhsZy4a47VmYZ0UMqUuDV6fQoN-o";
+  static String openSeaUri = "https://testnets.opensea.io/assets/mumbai/";
 
   // Images
   static String nftImage1 =
@@ -55,7 +56,14 @@ class AppStrings {
   static String quantityInput = "Enter amount of fractions";
   static String priceInput = "Enter price in Eth";
   static String symbolInput = "Enter token symbol";
+  static String NFTFetchError =
+      "There was an error fetching your NFTs. Please try again later...";
+
+  // Recasa page
+  static String viewButton = "View On OpenSea";
+  static String appBarRecasa = "Your Recasa NFTs";
 
   // Widgets
   static String defaultTextFieldHint = "Type here...";
+  static String recasaNFTs = "Recasa NFTs";
 }

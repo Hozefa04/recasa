@@ -7,15 +7,16 @@ import 'package:flutter/foundation.dart';
 
 import '../../../utils/app_strings.dart';
 
-part 'home_event.dart';
-part 'home_state.dart';
+part 'recasa_event.dart';
+part 'recasa_state.dart';
 
-class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(const HomeInitial()) {
-    on<LoadNFTs>((event, emit) async => _loadNFTs(event, emit));
+class RecasaBloc extends Bloc<RecasaEvent, RecasaState> {
+  RecasaBloc() : super(const RecasaInitial()) {
+    on<LoadRecasaNFTs>((event, emit) async => _loadRecasaNFTs(event, emit));
   }
 
-  Future<void> _loadNFTs(LoadNFTs event, Emitter<HomeState> emit) async {
+  Future<void> _loadRecasaNFTs(
+      LoadRecasaNFTs event, Emitter<RecasaState> emit) async {
     try {
       emit(const NFTsLoading());
       final alchemy = Alchemy();
@@ -26,7 +27,10 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       );
 
       final Either<RpcResponse, EnhancedNFTResponse> result =
-          await alchemy.enhanced.nft.getNFTs(owner: event.address);
+          await alchemy.enhanced.nft.getNFTs(
+        owner: event.address,
+        contractAddresses: [AppStrings.fractionalizeContractAddress],
+      );
 
       if (result.right.ownedNfts.length > 0) {
         emit(NFTsLoaded(

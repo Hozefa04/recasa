@@ -2,10 +2,9 @@ import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web3/flutter_web3.dart';
-import 'package:recasa/screens/homepage/bloc/home_bloc.dart';
-import 'package:recasa/screens/recasa/recasa_page.dart';
+import 'package:recasa/screens/recasa/bloc/recasa_bloc.dart';
 import 'package:recasa/utils/app_colors.dart';
-import 'package:recasa/utils/app_extras.dart';
+import 'package:recasa/utils/app_methods.dart';
 import 'package:recasa/utils/app_strings.dart';
 import 'package:recasa/utils/app_styles.dart';
 
@@ -13,20 +12,20 @@ import '../../widgets/fractionalize_button.dart';
 import '../../widgets/nft_image.dart';
 import '../landing/bloc/connect_bloc.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class RecasaNFTPage extends StatefulWidget {
+  const RecasaNFTPage({Key? key}) : super(key: key);
 
   @override
-  State<HomePage> createState() => _HomePageState();
+  State<RecasaNFTPage> createState() => _RecasaNFTPageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _RecasaNFTPageState extends State<RecasaNFTPage> {
   late String address;
 
   @override
   void initState() {
     address = BlocProvider.of<ConnectBloc>(context).walletAddress!;
-    BlocProvider.of<HomeBloc>(context).add(LoadNFTs(address));
+    BlocProvider.of<RecasaBloc>(context).add(LoadRecasaNFTs(address));
 
     // Subscribe to `chainChanged` event
     ethereum!.onChainChanged((chainId) {
@@ -35,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
     // Subscribe to `accountsChanged` event.
     ethereum!.onAccountsChanged((accounts) {
-      BlocProvider.of<HomeBloc>(context).add(LoadNFTs(accounts[0]));
+      BlocProvider.of<RecasaBloc>(context).add(LoadRecasaNFTs(accounts[0]));
     });
 
     // Subscribe to `message` event, need to convert JS message object to dart object.
@@ -50,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: CustomAppBar(address: address),
+      appBar: const CustomAppBar(),
       body: const HomeContent(),
     );
   }
@@ -59,92 +58,21 @@ class _HomePageState extends State<HomePage> {
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
     Key? key,
-    required this.address,
   }) : super(key: key);
-
-  final String address;
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: Colors.transparent,
       title: Text(
-        AppStrings.appName,
+        AppStrings.appBarRecasa,
         style: AppStyles.appBarStyle,
       ),
-      actions: [
-        AppBarWalletAddress(address: address),
-        const AppBarRecasaButton(),
-      ],
     );
   }
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
-
-class AppBarRecasaButton extends StatelessWidget {
-  const AppBarRecasaButton({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        AppExtras.push(context, const RecasaNFTPage());
-      },
-      child: Center(
-        child: Container(
-          margin: const EdgeInsets.only(right: 22),
-          child: Text(
-            AppStrings.recasaNFTs,
-            style: AppStyles.linkTextStyleBold,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class AppBarWalletAddress extends StatelessWidget {
-  const AppBarWalletAddress({
-    Key? key,
-    required this.address,
-  }) : super(key: key);
-
-  final String address;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.all(12),
-      padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(32),
-        color: AppColors.lightColor,
-      ),
-      child: AppBarTitle(address: address),
-    );
-  }
-}
-
-class AppBarTitle extends StatelessWidget {
-  const AppBarTitle({
-    Key? key,
-    required this.address,
-  }) : super(key: key);
-
-  final String address;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      address.substring(0, 5) + "...." + address.substring(38),
-      style: AppStyles.smallTextStyleBold,
-      textAlign: TextAlign.center,
-    );
-  }
 }
 
 class HomeContent extends StatelessWidget {
@@ -156,7 +84,7 @@ class HomeContent extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: const EdgeInsets.only(right: 32, left: 32, top: 12),
-      child: BlocBuilder<HomeBloc, HomeState>(
+      child: BlocBuilder<RecasaBloc, RecasaState>(
         builder: (context, state) {
           if (state is NFTsLoading) {
             return Center(
@@ -235,7 +163,7 @@ class HomeContent extends StatelessWidget {
                                         ?.tokenType ??
                                     "Unknown",
                               ),
-                              FractionalizeButton(
+                              ViewButton(
                                 nft: state.nfts[index],
                                 imageUrl: imageUrl,
                               ),
@@ -276,10 +204,10 @@ class HomeContent extends StatelessWidget {
   }
 }
 
-class FractionalizeButton extends StatelessWidget {
+class ViewButton extends StatelessWidget {
   final EnhancedNFT nft;
   final String imageUrl;
-  const FractionalizeButton({
+  const ViewButton({
     Key? key,
     required this.nft,
     required this.imageUrl,
@@ -288,7 +216,11 @@ class FractionalizeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        final url =
+            AppStrings.openSeaUri + nft.contract.address + "/" + nft.id.tokenId;
+        AppMethods.openUrl(url);
+      },
       child: Container(
         width: double.infinity,
         margin: const EdgeInsets.all(6),
@@ -298,8 +230,8 @@ class FractionalizeButton extends StatelessWidget {
           color: AppColors.secondaryColor,
         ),
         child: Text(
-          AppStrings.fracButton,
-          style: AppStyles.buttonTextStyle,
+          AppStrings.viewButton,
+          style: AppStyles.mediumTextStyleBold,
           textAlign: TextAlign.center,
         ),
       ),

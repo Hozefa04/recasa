@@ -8,6 +8,7 @@ class AppExtras {
     required BuildContext context,
     required String message,
     Color? bgColor,
+    double? width,
   }) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -15,6 +16,7 @@ class AppExtras {
           message,
           style: AppStyles.snackbarStyle,
         ),
+        width: width,
         backgroundColor: bgColor ?? AppColors.primaryColor,
         margin: const EdgeInsets.all(8),
         behavior: SnackBarBehavior.floating,
