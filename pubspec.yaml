@@ -29,8 +29,10 @@ environment:
 dependencies:
   alchemy_web3: ^0.0.1
   bloc: ^8.1.0
+  cloud_firestore: ^3.4.4
   cupertino_icons: ^1.0.2
   equatable: ^2.0.3
+  firebase_core: ^1.20.1
   flutter:
     sdk: flutter
   flutter_bloc: ^8.0.1
@@ -42,11 +44,6 @@ dependencies:
   web3dart: null
 
 dev_dependencies:
-  # The "flutter_lints" package below contains a set of recommended lints to
-  # encourage good coding practices. The lint set provided by the package is
-  # activated in the `analysis_options.yaml` file located at the root of your
-  # package. See that file for information about deactivating specific lint
-  # rules and activating additional ones.
   flutter_lints: ^1.0.0
   flutter_test:
     sdk: flutter
@@ -67,6 +64,7 @@ flutter:
   assets:
     - assets/abi/approve.json
     - assets/abi/fractionalize.json
+    - .env
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
   # For details regarding adding assets from package dependencies, see

@@ -114,20 +114,6 @@ class HomeContent extends StatelessWidget {
                 childAspectRatio: 2 / 1,
               ),
               itemBuilder: (context, index) {
-                late String imageUrl;
-                if (state.nfts[index].metadata != null &&
-                    state.nfts[index].metadata?.image != null) {
-                  if (state.nfts[index].metadata!.image!.contains("ipfs") &&
-                      !state.nfts[index].metadata!.image!.contains("gateway")) {
-                    String hash =
-                        state.nfts[index].metadata!.image!.substring(7);
-                    imageUrl = "https://cloudflare-ipfs.com/ipfs/" + hash;
-                  } else {
-                    imageUrl = state.nfts[index].metadata!.image!;
-                  }
-                } else {
-                  imageUrl = AppStrings.brokenImage;
-                }
                 return Container(
                   decoration: BoxDecoration(
                     color: AppColors.lightColor,
@@ -138,7 +124,7 @@ class HomeContent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       NFTImage(
-                        image: imageUrl,
+                        image: state.nfts[index].media[0].gateway,
                         tag: state.nfts[index].contract.toString() +
                             state.nfts[index].id.tokenId.toString(),
                       ),
@@ -164,7 +150,7 @@ class HomeContent extends StatelessWidget {
                               ),
                               ViewButton(
                                 nft: state.nfts[index],
-                                imageUrl: imageUrl,
+                                imageUrl: state.nfts[index].media[0].gateway,
                               ),
                             ],
                           ),
@@ -216,8 +202,10 @@ class ViewButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        final url =
-            AppStrings.openSeaUri + nft.contract.address + "/" + nft.id.tokenId;
+        final url = AppStrings.openSeaUri +
+            nft.contract.address +
+            "/" +
+            int.parse(nft.id.tokenId.substring(2), radix: 16).toString();
         AppMethods.openUrl(url);
       },
       child: Container(

@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recasa/screens/fractionalize/bloc/fractionalize_bloc.dart';
 import 'package:recasa/utils/app_colors.dart';
+import 'package:recasa/utils/app_extras.dart';
+import 'package:recasa/utils/app_methods.dart';
 
 import '../../utils/app_strings.dart';
 import '../../utils/app_styles.dart';
@@ -86,6 +88,8 @@ class InputFields extends StatelessWidget {
             NameText(name: nft.title ?? AppStrings.noName),
             const SizedBox(height: 4),
             ContractText(nft: nft),
+            const SizedBox(height: 4),
+            TokenText(nft: nft),
             const SizedBox(height: 22),
             CustomTextField(
               hintText: AppStrings.quantityInput,
@@ -100,6 +104,7 @@ class InputFields extends StatelessWidget {
               tokenId: nft.id.tokenId,
               uri: nft.tokenUri!.raw,
             ),
+            const StateText(),
           ],
         ),
       ),
@@ -120,30 +125,41 @@ class FractionalizeButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        BlocProvider.of<FractionalizeBloc>(context).add(FractionalizeNFT(
-          context,
-          _fractionsController.text,
-          contract,
-          tokenId,
-          uri,
-        ));
+    return BlocBuilder<FractionalizeBloc, FractionalizeState>(
+      builder: (context, state) {
+        if (state is FractionalizeFailureState ||
+            state is FractionalizationState ||
+            state is TransferTokenState ||
+            state is WalletErrorState ||
+            state is SetApprovalState) {
+          return Container();
+        }
+        return InkWell(
+          onTap: () {
+            BlocProvider.of<FractionalizeBloc>(context).add(FractionalizeNFT(
+              context,
+              _fractionsController.text,
+              contract,
+              tokenId,
+              uri,
+            ));
+          },
+          child: Container(
+            width: double.infinity,
+            margin: const EdgeInsets.all(6),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12),
+              color: AppColors.secondaryColor,
+            ),
+            child: Text(
+              AppStrings.fracButton,
+              style: AppStyles.smallTextStyleBold,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        );
       },
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.all(6),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: AppColors.secondaryColor,
-        ),
-        child: Text(
-          AppStrings.fracButton,
-          style: AppStyles.smallTextStyleBold,
-          textAlign: TextAlign.center,
-        ),
-      ),
     );
   }
 }
@@ -259,6 +275,112 @@ class ContractText extends StatelessWidget {
           "......" +
           nft.contract.address.substring(38, 42),
       style: AppStyles.mediumTextStyleBold,
+    );
+  }
+}
+
+class TokenText extends StatelessWidget {
+  const TokenText({
+    Key? key,
+    required this.nft,
+  }) : super(key: key);
+
+  final EnhancedNFT nft;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      "Token ID: " + int.parse(nft.id.tokenId.substring(2), radix: 16).toString(),
+      style: AppStyles.mediumTextStyleBold,
+    );
+  }
+}
+
+class StateText extends StatelessWidget {
+  const StateText({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocConsumer<FractionalizeBloc, FractionalizeState>(
+      listener: (context, state) {
+        if (state is FractionalizeFailureState) {
+          AppExtras.showToast(
+            context: context,
+            message: AppStrings.errorState,
+            bgColor: AppColors.errorColor,
+          );
+        }
+        if (state is FractionalizeSuccessState) {
+          AppExtras.showToast(
+            context: context,
+            message: AppStrings.successState,
+            bgColor: AppColors.successColor,
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is TransferTokenState) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                AppStrings.tokenTransfer,
+                style: AppStyles.mediumTextStyleBold,
+              ),
+              const SizedBox(width: 32),
+              SizedBox(
+                width: 32,
+                height: 32,
+                child: CircularProgressIndicator(
+                  color: AppColors.whiteColor,
+                ),
+              ),
+            ],
+          );
+        }
+        if (state is FractionalizationState) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                AppStrings.tokenTransfer,
+                style: AppStyles.mediumTextStyleBold,
+              ),
+              const SizedBox(width: 32),
+              SizedBox(
+                width: 32,
+                height: 32,
+                child: CircularProgressIndicator(
+                  color: AppColors.whiteColor,
+                ),
+              ),
+            ],
+          );
+        }
+        if (state is SetApprovalState) {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                AppStrings.approvalState,
+                style: AppStyles.mediumTextStyleBold,
+              ),
+              const SizedBox(width: 32),
+              SizedBox(
+                width: 32,
+                height: 32,
+                child: CircularProgressIndicator(
+                  color: AppColors.whiteColor,
+                ),
+              ),
+            ],
+          );
+        }
+        return Container();
+      },
     );
   }
 }

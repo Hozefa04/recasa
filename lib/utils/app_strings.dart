@@ -62,6 +62,11 @@ class AppStrings {
   static String quantityInput = "Enter amount of fractions";
   static String priceInput = "Enter price in Eth";
   static String symbolInput = "Enter token symbol";
+  static String errorState = "There was some error! Please try again later";
+  static String successState = "Fractionalization Complete!";
+  static String tokenTransfer = "Transferring main token";
+  static String fractionalizationState = "Fractionalizing your NFT";
+  static String approvalState = "Preparing for fractionalization";
 
   // Widgets
   static String defaultTextFieldHint = "Type here...";

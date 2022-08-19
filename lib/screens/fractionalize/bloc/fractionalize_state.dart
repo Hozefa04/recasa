@@ -55,3 +55,10 @@ class TransferTokenState extends FractionalizeState {
   @override
   List<Object> get props => [];
 }
+
+class TransferTokenFailureState extends FractionalizeState {
+  const TransferTokenFailureState();
+  
+  @override
+  List<Object> get props => [];
+}

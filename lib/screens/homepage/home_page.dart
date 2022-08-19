@@ -188,20 +188,8 @@ class HomeContent extends StatelessWidget {
                 childAspectRatio: 2 / 1,
               ),
               itemBuilder: (context, index) {
-                late String imageUrl;
-                if (state.nfts[index].metadata != null &&
-                    state.nfts[index].metadata?.image != null) {
-                  if (state.nfts[index].metadata!.image!.contains("ipfs") &&
-                      !state.nfts[index].metadata!.image!.contains("gateway")) {
-                    String hash =
-                        state.nfts[index].metadata!.image!.substring(7);
-                    imageUrl = "https://cloudflare-ipfs.com/ipfs/" + hash;
-                  } else {
-                    imageUrl = state.nfts[index].metadata!.image!;
-                  }
-                } else {
-                  imageUrl = AppStrings.brokenImage;
-                }
+                bool isERC721 =
+                    state.nfts[index].id.tokenMetadata?.tokenType == "ERC721";
                 return Container(
                   decoration: BoxDecoration(
                     color: AppColors.lightColor,
@@ -212,7 +200,7 @@ class HomeContent extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       NFTImage(
-                        image: imageUrl,
+                        image: state.nfts[index].media[0].gateway,
                         tag: state.nfts[index].contract.toString() +
                             state.nfts[index].id.tokenId.toString(),
                       ),
@@ -236,10 +224,13 @@ class HomeContent extends StatelessWidget {
                                         ?.tokenType ??
                                     "Unknown",
                               ),
-                              FractionalizeButton(
-                                nft: state.nfts[index],
-                                imageUrl: imageUrl,
-                              ),
+                              isERC721
+                                  ? FractionalizeButton(
+                                      nft: state.nfts[index],
+                                      imageUrl:
+                                          state.nfts[index].media[0].gateway,
+                                    )
+                                  : Container(),
                             ],
                           ),
                         ),

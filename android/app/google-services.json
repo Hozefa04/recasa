@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "178481495064",
+    "project_id": "reacsa-10ffe",
+    "storage_bucket": "reacsa-10ffe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:178481495064:android:6fe9ea1e1e1b85bf05176d",
+        "android_client_info": {
+          "package_name": "com.example.recasa"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "178481495064-m7gm1odb3c4hu17qojprokj3agj9j51a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBgXT-z38RUsmZC4setTNMGz3pBSM6i7fY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "178481495064-m7gm1odb3c4hu17qojprokj3agj9j51a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -29,13 +29,16 @@ class RecasaBloc extends Bloc<RecasaEvent, RecasaState> {
       final Either<RpcResponse, EnhancedNFTResponse> result =
           await alchemy.enhanced.nft.getNFTs(
         owner: event.address,
-        contractAddresses: [AppStrings.fractionalizeContractAddress],
       );
 
       if (result.right.ownedNfts.length > 0) {
+        var recasaNFTs = result.right.ownedNfts.where((nft) {
+          return nft.contract.address ==
+              "0x57197bdc4ad36dfb4f22849dd5a2b437cd02192a";
+        }).toList();
         emit(NFTsLoaded(
-          result.right.ownedNfts,
-          result.right.ownedNfts.length,
+          recasaNFTs,
+          recasaNFTs.length,
         ));
       } else {
         emit(const EmptyNFTs());

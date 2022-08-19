@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart' as fs;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -64,7 +65,7 @@ class AppMethods {
     await dotenv.load(fileName: '.env');
 
     EthereumAddress fracContractAddress =
-        EthereumAddress.fromHex(AppStrings.fractionalizeContractAddress);
+        EthereumAddress.fromHex("0x57197bdc4ad36dfb4f22849dd5a2b437cd02192a");
 
     EthereumAddress walletAddr = EthereumAddress.fromHex(walletAddress);
 
@@ -89,8 +90,42 @@ class AppMethods {
       chainId: 80001,
     );
 
-    debugPrint("Result: " + result.toString());
+    debugPrint("Approval Result: " + result.toString());
   }
+
+  // static Future<void> transferMainToken(
+  //   String address,
+  //   BigInt tokenId,
+  //   String walletAddress,
+  // ) async {
+  //   const abi = '''[
+  //     {
+  //       "inputs": [
+  //         {"internalType": "address", "name": "_collection", "type": "address"},
+  //         {"internalType": "uint256", "name": "_tokenId", "type": "uint256"}
+  //       ],
+  //       "name": "transferMainToken",
+  //       "outputs": [],
+  //       "stateMutability": "nonpayable",
+  //       "type": "function"
+  //     }
+  //   ]''';
+  //   // final web3provider = web3.Web3Provider(web3.ethereum!);
+  //   // final signer = web3provider.getSigner();
+
+  //   final privateWallet = web3.Wallet(dotenv.env['PRIVATE_KEY']!);
+  //   final provider = privateWallet.connect(web3.JsonRpcProvider(AppStrings.polygonEndpoint));
+
+  //   final contract = web3.Contract(
+  //     AppStrings.fractionalizeContractAddress,
+  //     web3.Interface(abi),
+  //     provider,
+  //   );
+
+  //   final result = await contract.call("transferMainToken", [address, tokenId]);
+
+  //   print("Transfer result" + result);
+  // }
 
   static Future<void> transferMainToken(
     String address,
@@ -106,7 +141,7 @@ class AppMethods {
     await dotenv.load(fileName: '.env');
 
     EthereumAddress nftContractAddress =
-        EthereumAddress.fromHex(AppStrings.fractionalizeContractAddress);
+        EthereumAddress.fromHex("0x57197bdc4ad36dfb4f22849dd5a2b437cd02192a");
 
     EthereumAddress walletAddr = EthereumAddress.fromHex(walletAddress);
 
@@ -131,7 +166,7 @@ class AppMethods {
       chainId: 80001,
     );
 
-    debugPrint("Result: " + result.toString());
+    debugPrint("Transfer Result: " + result.toString());
   }
 
   static Future<void> fractionalize(
@@ -155,7 +190,7 @@ class AppMethods {
     DeployedContract contract = await AppMethods.loadContract(
       contractJson: "assets/abi/fractionalize.json",
       contractName: "FractionalizeNFT",
-      contractAddress: AppStrings.fractionalizeContractAddress,
+      contractAddress: "0x57197bdc4ad36dfb4f22849dd5a2b437cd02192a",
     );
 
     final ethFunction = contract.function("mint");
@@ -170,5 +205,51 @@ class AppMethods {
     );
 
     debugPrint("Result: " + result.toString());
+  }
+
+  static String getTokenId(String tokenId) {
+    late String newTokenId;
+    String removed0x = tokenId.substring(2);
+    // print(removed0x);
+
+    for (int i = 0; i < removed0x.length; i++) {
+      if (removed0x[i] != "0") {
+        newTokenId = removed0x.substring(i);
+        break;
+      }
+      if (i == removed0x.length - 1) {
+        newTokenId = "0";
+      }
+    }
+
+    return newTokenId;
+  }
+
+  static Future<void> storeData(
+      String collectionAddress, String tokenId) async {
+    String newTokenId = int.parse(tokenId.substring(2), radix: 16).toString();
+    await fs.FirebaseFirestore.instance.collection("NFTs").doc().set({
+      "collectionAddress": collectionAddress,
+      "tokenId": newTokenId,
+      "status": "Pending",
+    });
+  }
+
+  static Future<bool> getStatus(String contractAddress, String tokenId) async {
+    final querySnapshot = await fs.FirebaseFirestore.instance
+        .collection("NFTs")
+        .limit(1)
+        .where("collectionAddress", isEqualTo: contractAddress)
+        .where("tokenId", isEqualTo: tokenId)
+        .get();
+    print(querySnapshot.docs[1].data()['status']);
+    if (!querySnapshot.docs[0].exists) {
+      return false;
+    }
+    if (querySnapshot.docs[1].data()['status'] == "Complete") {
+      return true;
+    } else {
+      return false;
+    }
   }
 }
