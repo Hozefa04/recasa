@@ -49,9 +49,7 @@ class _RecasaNFTPageState extends State<RecasaNFTPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: CustomAppBar(
-        title: AppStrings.appBarRecasa
-      ),
+      appBar: CustomAppBar(title: AppStrings.appBarRecasa),
       body: Container(
         margin: const EdgeInsets.only(right: 32, left: 32, top: 12),
         child: StreamBuilder(
@@ -161,25 +159,32 @@ class StatusView extends StatelessWidget {
               style: AppStyles.mediumTextStyleBold,
             ),
           )
-        : InkWell(
-            onTap: () {
-              AppExtras.push(context, SalePage(nftId: nftId));
-            },
-            child: Container(
-              width: double.infinity,
-              margin: const EdgeInsets.all(6),
-              padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: AppColors.secondaryColor,
-              ),
-              child: Text(
-                AppStrings.saleButton,
-                style: AppStyles.buttonTextStyle,
-                textAlign: TextAlign.center,
-              ),
-            ),
-          );
+        : status == "ForSale"
+            ? Center(
+                child: Text(
+                  AppStrings.forSale,
+                  style: AppStyles.mediumTextStyleBold,
+                ),
+              )
+            : InkWell(
+                onTap: () {
+                  AppExtras.push(context, SalePage(nftId: nftId));
+                },
+                child: Container(
+                  width: double.infinity,
+                  margin: const EdgeInsets.all(6),
+                  padding: const EdgeInsets.all(12),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: AppColors.secondaryColor,
+                  ),
+                  child: Text(
+                    AppStrings.saleButton,
+                    style: AppStyles.buttonTextStyle,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              );
     ;
   }
 }

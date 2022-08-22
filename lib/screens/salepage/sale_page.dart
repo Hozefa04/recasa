@@ -181,7 +181,7 @@ class InputFields extends StatelessWidget {
               controller: _priceController,
             ),
             const SizedBox(height: 22),
-            FractionalizeButton(doc: doc),
+            SaleButton(doc: doc),
             const StateText(),
           ],
         ),
@@ -258,9 +258,9 @@ class AmountText extends StatelessWidget {
   }
 }
 
-class FractionalizeButton extends StatelessWidget {
+class SaleButton extends StatelessWidget {
   final DocumentSnapshot doc;
-  const FractionalizeButton({
+  const SaleButton({
     Key? key,
     required this.doc,
   }) : super(key: key);
@@ -269,7 +269,7 @@ class FractionalizeButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<SaleBloc, SaleState>(
       builder: (context, state) {
-        if (state is NFTForSaleState) {
+        if (state is NFTForSaleState || state is NFTForSaleAddedState) {
           return Container();
         }
         return InkWell(
@@ -342,6 +342,12 @@ class StateText extends StatelessWidget {
                 ),
               ),
             ],
+          );
+        }
+        if (state is NFTForSaleAddedState) {
+          return Text(
+            AppStrings.forSale,
+            style: AppStyles.mediumTextStyleBold,
           );
         }
         return Container();

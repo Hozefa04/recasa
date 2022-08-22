@@ -57,6 +57,7 @@ class AppStrings {
   static String viewButton = "View On OpenSea";
   static String appBarRecasa = "Your Recasa NFTs";
   static String noRecasaNFTs = "You don't have any Recasa NFTs";
+  static String forSale = "NFT For Sale";
 
   //Fractionalize page
   static String fractionalizeTitle = "Fractionalize your NFT";

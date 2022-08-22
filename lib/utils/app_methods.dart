@@ -304,5 +304,12 @@ class AppMethods {
       "nftPrice": price,
       "nftSeller": walletAddress,
     });
+
+    await fs.FirebaseFirestore.instance
+        .collection("NFTs")
+        .doc(walletAddress)
+        .collection("RecasaNFTs")
+        .doc(doc.id)
+        .update({"status": "ForSale"});
   }
 }

@@ -74,8 +74,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: AppStyles.appBarStyle,
       ),
       actions: [
-        AppBarWalletAddress(address: address),
         const AppBarRecasaButton(),
+        AppBarWalletAddress(address: address),
       ],
     );
   }
@@ -86,6 +86,30 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class AppBarRecasaButton extends StatelessWidget {
   const AppBarRecasaButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        AppExtras.push(context, const RecasaNFTPage());
+      },
+      child: Center(
+        child: Container(
+          margin: const EdgeInsets.only(right: 22),
+          child: Text(
+            AppStrings.recasaNFTs,
+            style: AppStyles.linkTextStyleBold,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class MarketplaceButton extends StatelessWidget {
+  const MarketplaceButton({
     Key? key,
   }) : super(key: key);
 
