@@ -5,10 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recasa/screens/fractionalize/bloc/fractionalize_bloc.dart';
 import 'package:recasa/utils/app_colors.dart';
 import 'package:recasa/utils/app_extras.dart';
-import 'package:recasa/utils/app_methods.dart';
 
 import '../../utils/app_strings.dart';
 import '../../utils/app_styles.dart';
+import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_textfield.dart';
 
 TextEditingController _fractionsController = TextEditingController();
@@ -29,7 +29,9 @@ class FractionalizePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       body: FractionalizeContent(imageUrl: imageUrl, nft: nft),
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(
+        title: AppStrings.fractionalizeTitle,
+      ),
     );
   }
 }
@@ -160,7 +162,7 @@ class FractionalizeButton extends StatelessWidget {
             ),
             child: Text(
               AppStrings.fracButton,
-              style: AppStyles.smallTextStyleBold,
+              style: AppStyles.buttonTextStyle,
               textAlign: TextAlign.center,
             ),
           ),
@@ -168,26 +170,6 @@ class FractionalizeButton extends StatelessWidget {
       },
     );
   }
-}
-
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      title: Text(
-        AppStrings.fractionalizeTitle,
-        style: AppStyles.appBarStyle,
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
 class ThumbImage extends StatelessWidget {

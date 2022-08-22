@@ -50,7 +50,7 @@ class AppStrings {
   static String noName = "No Name";
   static String noValue = "nill";
   static String noNFTs = "You do not have any NFTs";
-  static String NFTFetchError =
+  static String nftFetchError =
       "There was an error fetching your NFTs. Please try again later...";
 
   // Recasa page
@@ -61,7 +61,6 @@ class AppStrings {
   //Fractionalize page
   static String fractionalizeTitle = "Fractionalize your NFT";
   static String quantityInput = "Enter amount of fractions";
-  static String priceInput = "Enter price in Eth";
   static String symbolInput = "Enter token symbol";
   static String errorState = "There was some error! Please try again later";
   static String successState = "Fractionalization Complete!";
@@ -69,6 +68,13 @@ class AppStrings {
   static String fractionalizationState = "Fractionalizing your NFT";
   static String approvalState = "Preparing for fractionalization";
   static String saleButton = "Put For Sale";
+
+  // Sale Page
+  static String salePageTitle = "Put For Sale";
+  static String priceInput = "Enter price (in Eth)";
+  static String saleAdded = "Added for sale!";
+  static String saleError = "There was anm error! Please try again";
+  static String addingForSale = "Adding for sale...";
 
   // Widgets
   static String defaultTextFieldHint = "Type here...";

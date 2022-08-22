@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:recasa/screens/fractionalize/bloc/fractionalize_bloc.dart';
 import 'package:recasa/screens/homepage/bloc/home_bloc.dart';
+import 'package:recasa/screens/salepage/bloc/sale_bloc.dart';
 import 'package:recasa/utils/app_strings.dart';
 
 import 'bloc/observer.dart';
@@ -34,6 +35,7 @@ class Recasa extends StatelessWidget {
         BlocProvider(create: (context) => ConnectBloc()),
         BlocProvider(create: (context) => HomeBloc()),
         BlocProvider(create: (context) => FractionalizeBloc()),
+        BlocProvider(create: (context) => SaleBloc()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

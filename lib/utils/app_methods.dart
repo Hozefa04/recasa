@@ -276,4 +276,33 @@ class AppMethods {
     //   return false;
     // }
   }
+
+  static Future<fs.DocumentSnapshot> getRecasaNFT(
+    String nftId,
+    String walletAddress,
+  ) async {
+    fs.DocumentSnapshot doc = await fs.FirebaseFirestore.instance
+        .collection("NFTs")
+        .doc(walletAddress)
+        .collection("RecasaNFTs")
+        .doc(nftId)
+        .get();
+
+    return doc;
+  }
+
+  static Future<void> addForSale(
+    fs.DocumentSnapshot doc,
+    String price,
+    String walletAddress,
+  ) async {
+    await fs.FirebaseFirestore.instance.collection("ForSale").doc().set({
+      "nftName": doc.get("nftName"),
+      "nftImage": doc.get("nftImage"),
+      "nftDescription": doc.get("nftDescription"),
+      "nftAmount": doc.get("nftAmount"),
+      "nftPrice": price,
+      "nftSeller": walletAddress,
+    });
+  }
 }

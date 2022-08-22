@@ -1,12 +1,13 @@
-import 'package:alchemy_web3/alchemy_web3.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web3/flutter_web3.dart';
+import 'package:recasa/screens/salepage/sale_page.dart';
 import 'package:recasa/utils/app_colors.dart';
-import 'package:recasa/utils/app_methods.dart';
+import 'package:recasa/utils/app_extras.dart';
 import 'package:recasa/utils/app_strings.dart';
 import 'package:recasa/utils/app_styles.dart';
+import '../../widgets/custom_appbar.dart';
 import '../../widgets/nft_image.dart';
 import '../../widgets/nft_info.dart';
 import '../landing/bloc/connect_bloc.dart';
@@ -48,7 +49,9 @@ class _RecasaNFTPageState extends State<RecasaNFTPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
-      appBar: const CustomAppBar(),
+      appBar: CustomAppBar(
+        title: AppStrings.appBarRecasa
+      ),
       body: Container(
         margin: const EdgeInsets.only(right: 32, left: 32, top: 12),
         child: StreamBuilder(
@@ -59,11 +62,16 @@ class _RecasaNFTPageState extends State<RecasaNFTPage> {
               .snapshots(),
           builder:
               (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.data != null && snapshot.data!.docs.isEmpty) {
+              return Text(
+                AppStrings.noRecasaNFTs,
+                style: AppStyles.mediumTextStyleBold,
+              );
+            }
             if (!snapshot.hasData) {
               return Center(
-                child: Text(
-                  AppStrings.noRecasaNFTs,
-                  style: AppStyles.mediumTextStyleBold,
+                child: CircularProgressIndicator(
+                  color: AppColors.whiteColor,
                 ),
               );
             }
@@ -117,6 +125,7 @@ class _RecasaNFTPageState extends State<RecasaNFTPage> {
                               ),
                               StatusView(
                                 status: snapshot.data?.docs[index]['status'],
+                                nftId: snapshot.data!.docs[index].id,
                               ),
                             ],
                           ),
@@ -134,31 +143,13 @@ class _RecasaNFTPageState extends State<RecasaNFTPage> {
   }
 }
 
-class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: Colors.transparent,
-      title: Text(
-        AppStrings.appBarRecasa,
-        style: AppStyles.appBarStyle,
-      ),
-    );
-  }
-
-  @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight);
-}
-
 class StatusView extends StatelessWidget {
   final String status;
+  final String nftId;
   const StatusView({
     Key? key,
     required this.status,
+    required this.nftId,
   }) : super(key: key);
 
   @override
@@ -171,7 +162,9 @@ class StatusView extends StatelessWidget {
             ),
           )
         : InkWell(
-            onTap: () {},
+            onTap: () {
+              AppExtras.push(context, SalePage(nftId: nftId));
+            },
             child: Container(
               width: double.infinity,
               margin: const EdgeInsets.all(6),

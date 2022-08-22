@@ -252,7 +252,7 @@ class HomeContent extends StatelessWidget {
           if (state is NFTsError) {
             return Center(
               child: Text(
-                AppStrings.NFTFetchError,
+                AppStrings.nftFetchError,
                 style: AppStyles.mediumTextStyleBold,
               ),
             );
