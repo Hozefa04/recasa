@@ -60,6 +60,7 @@ class FractionalizeBloc extends Bloc<FractionalizeEvent, FractionalizeState> {
         nftName: event.nftName,
         nftDescription: event.nftDescription,
         amount: event.fractions,
+        walletAddress: walletAddress!,
       );
       await AppMethods.fractionalize(
         BlocProvider.of<ConnectBloc>(event.context).walletAddress!,

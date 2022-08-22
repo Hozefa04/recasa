@@ -1,8 +1,8 @@
 import 'package:alchemy_web3/alchemy_web3.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web3/flutter_web3.dart';
-import 'package:recasa/screens/recasa/bloc/recasa_bloc.dart';
 import 'package:recasa/utils/app_colors.dart';
 import 'package:recasa/utils/app_methods.dart';
 import 'package:recasa/utils/app_strings.dart';
@@ -10,6 +10,8 @@ import 'package:recasa/utils/app_styles.dart';
 import '../../widgets/nft_image.dart';
 import '../../widgets/nft_info.dart';
 import '../landing/bloc/connect_bloc.dart';
+
+late String address;
 
 class RecasaNFTPage extends StatefulWidget {
   const RecasaNFTPage({Key? key}) : super(key: key);
@@ -19,12 +21,9 @@ class RecasaNFTPage extends StatefulWidget {
 }
 
 class _RecasaNFTPageState extends State<RecasaNFTPage> {
-  late String address;
-
   @override
   void initState() {
     address = BlocProvider.of<ConnectBloc>(context).walletAddress!;
-    BlocProvider.of<RecasaBloc>(context).add(LoadRecasaNFTs(address));
 
     // Subscribe to `chainChanged` event
     ethereum!.onChainChanged((chainId) {
@@ -33,7 +32,8 @@ class _RecasaNFTPageState extends State<RecasaNFTPage> {
 
     // Subscribe to `accountsChanged` event.
     ethereum!.onAccountsChanged((accounts) {
-      BlocProvider.of<RecasaBloc>(context).add(LoadRecasaNFTs(accounts[0]));
+      address = BlocProvider.of<ConnectBloc>(context).walletAddress!;
+      setState(() {});
     });
 
     // Subscribe to `message` event, need to convert JS message object to dart object.
@@ -49,7 +49,87 @@ class _RecasaNFTPageState extends State<RecasaNFTPage> {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       appBar: const CustomAppBar(),
-      body: const HomeContent(),
+      body: Container(
+        margin: const EdgeInsets.only(right: 32, left: 32, top: 12),
+        child: StreamBuilder(
+          stream: FirebaseFirestore.instance
+              .collection("NFTs")
+              .doc(address)
+              .collection("RecasaNFTs")
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (!snapshot.hasData) {
+              return Center(
+                child: Text(
+                  AppStrings.noRecasaNFTs,
+                  style: AppStyles.mediumTextStyleBold,
+                ),
+              );
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(
+                  color: AppColors.whiteColor,
+                ),
+              );
+            }
+            return GridView.builder(
+              itemCount: snapshot.data?.docs.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                crossAxisSpacing: 32.0,
+                mainAxisSpacing: 32.0,
+                childAspectRatio: 2 / 1,
+              ),
+              itemBuilder: (context, index) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.lightColor,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      NFTImage(
+                        image: snapshot.data?.docs[index]['nftImage'],
+                        tag: snapshot.data!.docs[index].id,
+                      ),
+                      Expanded(
+                        flex: 1,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12,
+                            horizontal: 4,
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              NFTInfo(
+                                name: snapshot.data?.docs[index]['nftName'] ??
+                                    AppStrings.noName,
+                                value: snapshot.data?.docs[index]
+                                        ['nftAmount'] ??
+                                    AppStrings.noValue,
+                                standard: "",
+                              ),
+                              StatusView(
+                                status: snapshot.data?.docs[index]['status'],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            );
+          },
+        ),
+      ),
     );
   }
 }
@@ -74,158 +154,39 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }
 
-class HomeContent extends StatelessWidget {
-  const HomeContent({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(right: 32, left: 32, top: 12),
-      child: BlocBuilder<RecasaBloc, RecasaState>(
-        builder: (context, state) {
-          if (state is NFTsLoading) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircularProgressIndicator(
-                    color: AppColors.secondaryColor,
-                  ),
-                  const SizedBox(height: 22),
-                  Text(
-                    AppStrings.loadingText,
-                    style: AppStyles.mediumTextStyleBold,
-                    textAlign: TextAlign.center,
-                  ),
-                ],
-              ),
-            );
-          }
-          if (state is NFTsLoaded) {
-            return GridView.builder(
-              itemCount: state.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                crossAxisSpacing: 32.0,
-                mainAxisSpacing: 32.0,
-                childAspectRatio: 2 / 1,
-              ),
-              itemBuilder: (context, index) {
-                return Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.lightColor,
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      NFTImage(
-                        image: state.nfts[index].media[0].gateway,
-                        tag: state.nfts[index].contract.toString() +
-                            state.nfts[index].id.tokenId.toString(),
-                      ),
-                      Expanded(
-                        flex: 1,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 12,
-                            horizontal: 4,
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              NFTInfo(
-                                name: state.nfts[index].title ??
-                                    AppStrings.noName,
-                                value: state.nfts[index].balance ??
-                                    AppStrings.noValue,
-                                standard: state.nfts[index].id.tokenMetadata
-                                        ?.tokenType ??
-                                    "Unknown",
-                              ),
-                              StatusView(
-                                nft: state.nfts[index],
-                                imageUrl: state.nfts[index].media[0].gateway,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            );
-          }
-          if (state is EmptyNFTs) {
-            return Center(
-              child: Text(
-                AppStrings.noNFTs,
-                style: AppStyles.mediumTextStyleBold,
-              ),
-            );
-          }
-          if (state is NFTsError) {
-            return Center(
-              child: Text(
-                AppStrings.NFTFetchError,
-                style: AppStyles.mediumTextStyleBold,
-              ),
-            );
-          }
-          return Center(
-            child: CircularProgressIndicator(
-              color: AppColors.secondaryColor,
-            ),
-          );
-        },
-      ),
-    );
-  }
-}
-
-class StatusView extends StatefulWidget {
-  final EnhancedNFT nft;
-  final String imageUrl;
+class StatusView extends StatelessWidget {
+  final String status;
   const StatusView({
     Key? key,
-    required this.nft,
-    required this.imageUrl,
+    required this.status,
   }) : super(key: key);
 
   @override
-  State<StatusView> createState() => _StatusViewState();
-}
-
-class _StatusViewState extends State<StatusView> {
-  bool status = false;
-
-  @override
-  void initState() {
-    getStatus();
-    super.initState();
-  }
-
-  Future<void> getStatus() async {
-    status = await AppMethods.getStatus(
-      widget.nft.contract.address,
-      int.parse(widget.nft.id.tokenId.substring(2), radix: 16).toString(),
-    );
-    setState(() {});
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        status ? "Ready to sell" : "Pending",
-        style: AppStyles.mediumTextStyleBold,
-      ),
-    );
+    return status == "Pending"
+        ? Center(
+            child: Text(
+              status,
+              style: AppStyles.mediumTextStyleBold,
+            ),
+          )
+        : InkWell(
+            onTap: () {},
+            child: Container(
+              width: double.infinity,
+              margin: const EdgeInsets.all(6),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                color: AppColors.secondaryColor,
+              ),
+              child: Text(
+                AppStrings.saleButton,
+                style: AppStyles.buttonTextStyle,
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+    ;
   }
 }

@@ -232,9 +232,15 @@ class AppMethods {
     required String nftName,
     required String nftDescription,
     required String amount,
+    required String walletAddress,
   }) async {
     String newTokenId = int.parse(tokenId.substring(2), radix: 16).toString();
-    await fs.FirebaseFirestore.instance.collection("NFTs").doc().set({
+    await fs.FirebaseFirestore.instance
+        .collection("NFTs")
+        .doc(walletAddress)
+        .collection("RecasaNFTs")
+        .doc()
+        .set({
       "collectionAddress": collectionAddress,
       "tokenId": newTokenId,
       "status": "Pending",

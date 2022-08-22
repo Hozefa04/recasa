@@ -56,6 +56,7 @@ class AppStrings {
   // Recasa page
   static String viewButton = "View On OpenSea";
   static String appBarRecasa = "Your Recasa NFTs";
+  static String noRecasaNFTs = "You don't have any Recasa NFTs";
 
   //Fractionalize page
   static String fractionalizeTitle = "Fractionalize your NFT";
@@ -67,6 +68,7 @@ class AppStrings {
   static String tokenTransfer = "Transferring main token";
   static String fractionalizationState = "Fractionalizing your NFT";
   static String approvalState = "Preparing for fractionalization";
+  static String saleButton = "Put For Sale";
 
   // Widgets
   static String defaultTextFieldHint = "Type here...";
