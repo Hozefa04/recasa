@@ -103,6 +103,7 @@ class InputFields extends StatelessWidget {
               contract: nft.contract.address,
               tokenId: nft.id.tokenId,
               uri: nft.tokenUri!.raw,
+              nft: nft,
             ),
             const StateText(),
           ],
@@ -116,11 +117,13 @@ class FractionalizeButton extends StatelessWidget {
   final String contract;
   final String tokenId;
   final String uri;
+  final EnhancedNFT nft;
   const FractionalizeButton({
     Key? key,
     required this.contract,
     required this.tokenId,
     required this.uri,
+    required this.nft,
   }) : super(key: key);
 
   @override
@@ -142,6 +145,9 @@ class FractionalizeButton extends StatelessWidget {
               contract,
               tokenId,
               uri,
+              nft.media[0].gateway,
+              nft.title ?? "",
+              nft.description ?? "",
             ));
           },
           child: Container(
@@ -290,7 +296,8 @@ class TokenText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Text(
-      "Token ID: " + int.parse(nft.id.tokenId.substring(2), radix: 16).toString(),
+      "Token ID: " +
+          int.parse(nft.id.tokenId.substring(2), radix: 16).toString(),
       style: AppStyles.mediumTextStyleBold,
     );
   }
@@ -345,7 +352,7 @@ class StateText extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                AppStrings.tokenTransfer,
+                AppStrings.fractionalizationState,
                 style: AppStyles.mediumTextStyleBold,
               ),
               const SizedBox(width: 32),

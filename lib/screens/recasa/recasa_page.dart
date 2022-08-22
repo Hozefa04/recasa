@@ -148,7 +148,7 @@ class HomeContent extends StatelessWidget {
                                         ?.tokenType ??
                                     "Unknown",
                               ),
-                              ViewButton(
+                              StatusView(
                                 nft: state.nfts[index],
                                 imageUrl: state.nfts[index].media[0].gateway,
                               ),
@@ -189,38 +189,42 @@ class HomeContent extends StatelessWidget {
   }
 }
 
-class ViewButton extends StatelessWidget {
+class StatusView extends StatefulWidget {
   final EnhancedNFT nft;
   final String imageUrl;
-  const ViewButton({
+  const StatusView({
     Key? key,
     required this.nft,
     required this.imageUrl,
   }) : super(key: key);
 
   @override
+  State<StatusView> createState() => _StatusViewState();
+}
+
+class _StatusViewState extends State<StatusView> {
+  bool status = false;
+
+  @override
+  void initState() {
+    getStatus();
+    super.initState();
+  }
+
+  Future<void> getStatus() async {
+    status = await AppMethods.getStatus(
+      widget.nft.contract.address,
+      int.parse(widget.nft.id.tokenId.substring(2), radix: 16).toString(),
+    );
+    setState(() {});
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        final url = AppStrings.openSeaUri +
-            nft.contract.address +
-            "/" +
-            int.parse(nft.id.tokenId.substring(2), radix: 16).toString();
-        AppMethods.openUrl(url);
-      },
-      child: Container(
-        width: double.infinity,
-        margin: const EdgeInsets.all(6),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          color: AppColors.secondaryColor,
-        ),
-        child: Text(
-          AppStrings.viewButton,
-          style: AppStyles.mediumTextStyleBold,
-          textAlign: TextAlign.center,
-        ),
+    return Center(
+      child: Text(
+        status ? "Ready to sell" : "Pending",
+        style: AppStyles.mediumTextStyleBold,
       ),
     );
   }

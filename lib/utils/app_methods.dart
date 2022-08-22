@@ -225,31 +225,49 @@ class AppMethods {
     return newTokenId;
   }
 
-  static Future<void> storeData(
-      String collectionAddress, String tokenId) async {
+  static Future<void> storeData({
+    required String collectionAddress,
+    required String tokenId,
+    required String nftImage,
+    required String nftName,
+    required String nftDescription,
+    required String amount,
+  }) async {
     String newTokenId = int.parse(tokenId.substring(2), radix: 16).toString();
     await fs.FirebaseFirestore.instance.collection("NFTs").doc().set({
       "collectionAddress": collectionAddress,
       "tokenId": newTokenId,
       "status": "Pending",
+      "nftImage": nftImage,
+      "nftName": nftName,
+      "nftDescription": nftDescription,
+      "nftAmount": amount,
     });
   }
 
   static Future<bool> getStatus(String contractAddress, String tokenId) async {
+    print("Contract Address: " + contractAddress);
     final querySnapshot = await fs.FirebaseFirestore.instance
         .collection("NFTs")
-        .limit(1)
-        .where("collectionAddress", isEqualTo: contractAddress)
         .where("tokenId", isEqualTo: tokenId)
+        .limit(1)
         .get();
-    print(querySnapshot.docs[1].data()['status']);
-    if (!querySnapshot.docs[0].exists) {
+    if (querySnapshot.docs.isNotEmpty) {
+      print(querySnapshot.docs[0].data());
+      if (querySnapshot.docs[0].data()['status'] == "Complete") {
+        return true;
+      }
       return false;
-    }
-    if (querySnapshot.docs[1].data()['status'] == "Complete") {
-      return true;
     } else {
       return false;
     }
+    // if (!querySnapshot.docs[0].exists) {
+    //   return false;
+    // }
+    // if (querySnapshot.docs[0].data()['status'] == "Complete") {
+    //   return true;
+    // } else {
+    //   return false;
+    // }
   }
 }

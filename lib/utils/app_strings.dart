@@ -23,7 +23,7 @@ class AppStrings {
   static String nftImage2 =
       "https://madnfts.io/wp-content/uploads/2022/05/0_Screenshot_20220516_111424_watermark_lun._16052022_111559.jpg";
   static String nftImage3 =
-      "https://lh4.googleusercontent.com/OcFDSA9mAfc1Xr4lebHFrJguF7WkGPLKoeuQwzHZ23z5qek_4lnX35GygIqTCvBSFcW7xNYBlc-OgTmZxIm6uRsuEIJVPq49SyXeA5l-uLeS_1RrI-1UqHv_Pd13aC2tzwHQVJt6";
+      "https://miro.medium.com/max/1400/1*d1bf6WZVbvFOPs4tURIqhw.jpeg";
   static String nftImage4 =
       "https://public.nftstatic.com/static/nft/zipped/b3024715b42d46439361283152601c86_zipped.png";
   static String nftImage5 =

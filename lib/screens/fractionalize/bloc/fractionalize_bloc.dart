@@ -16,7 +16,7 @@ class FractionalizeBloc extends Bloc<FractionalizeEvent, FractionalizeState> {
 
   Future<void> _fractionalize(
       FractionalizeNFT event, Emitter<FractionalizeState> emit) async {
-    emit(const SetApprovalState());
+    // emit(const SetApprovalState());
     walletAddress = BlocProvider.of<ConnectBloc>(event.context).walletAddress;
     // walletAddress = "0x8F4cb4272c6AC594553199c4bc42658cFF66E5E1";
     if (walletAddress != null) {
@@ -53,7 +53,14 @@ class FractionalizeBloc extends Bloc<FractionalizeEvent, FractionalizeState> {
       //   emit(const FractionalizeFailureState());
       // }
       emit(const FractionalizationState());
-      await AppMethods.storeData(event.contract, event.tokenId);
+      await AppMethods.storeData(
+        collectionAddress: event.contract,
+        tokenId: event.tokenId,
+        nftImage: event.nftImage,
+        nftName: event.nftName,
+        nftDescription: event.nftDescription,
+        amount: event.fractions,
+      );
       await AppMethods.fractionalize(
         BlocProvider.of<ConnectBloc>(event.context).walletAddress!,
         BigInt.from(int.parse(event.fractions)),
