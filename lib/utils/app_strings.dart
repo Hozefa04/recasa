@@ -77,7 +77,12 @@ class AppStrings {
   static String saleError = "There was anm error! Please try again";
   static String addingForSale = "Adding for sale...";
 
+  // Marketplace Page
+  static String discoverText = "Discover unique and incredible rare digital art";
+  static String discoverTextMini = "Every art is something amazing. Become a partial owner of collectable NFTs you otherwise could not afford.";
+
   // Widgets
   static String defaultTextFieldHint = "Type here...";
   static String recasaNFTs = "Recasa NFTs";
+  static String marketplace = "MarketPlace";
 }

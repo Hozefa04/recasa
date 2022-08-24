@@ -12,7 +12,6 @@ import '../../widgets/custom_appbar.dart';
 import '../../widgets/custom_textfield.dart';
 
 TextEditingController _fractionsController = TextEditingController();
-TextEditingController _symbolController = TextEditingController();
 
 class FractionalizePage extends StatelessWidget {
   final EnhancedNFT nft;

@@ -60,6 +60,6 @@ class AppStyles {
   static TextStyle bigHeading = GoogleFonts.openSans(
     color: Colors.white,
     fontWeight: FontWeight.bold,
-    fontSize: 100,
+    fontSize: 72,
   );
 }

@@ -252,14 +252,13 @@ class AppMethods {
   }
 
   static Future<bool> getStatus(String contractAddress, String tokenId) async {
-    print("Contract Address: " + contractAddress);
+    debugPrint("Contract Address: " + contractAddress);
     final querySnapshot = await fs.FirebaseFirestore.instance
         .collection("NFTs")
         .where("tokenId", isEqualTo: tokenId)
         .limit(1)
         .get();
     if (querySnapshot.docs.isNotEmpty) {
-      print(querySnapshot.docs[0].data());
       if (querySnapshot.docs[0].data()['status'] == "Complete") {
         return true;
       }

@@ -26,13 +26,13 @@ class ConnectBloc extends Bloc<ConnectEvent, ConnectState> {
           final accs = await ethereum!.requestAccount();
           if (accs[0].isNotEmpty) {
             address = accs[0];
-            print(accs[0]);
+            debugPrint(accs[0]);
             emit(const WalletConnected());
           } else {
             emit(const WalletError());
           }
         } on EthereumUserRejected {
-          print('User rejected the modal');
+          debugPrint('User rejected the modal');
         }
       }
     } catch (e) {

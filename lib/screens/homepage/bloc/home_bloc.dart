@@ -28,7 +28,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       final Either<RpcResponse, EnhancedNFTResponse> result =
           await alchemy.enhanced.nft.getNFTs(owner: event.address);
 
-      if (result.right.ownedNfts.length > 0) {
+      if (result.right.ownedNfts.isNotEmpty) {
         emit(NFTsLoaded(
           result.right.ownedNfts,
           result.right.ownedNfts.length,

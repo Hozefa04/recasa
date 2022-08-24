@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_web3/flutter_web3.dart';
 import 'package:recasa/screens/fractionalize/fractionalize_page.dart';
 import 'package:recasa/screens/homepage/bloc/home_bloc.dart';
+import 'package:recasa/screens/marketplace/marketplace_view.dart';
 import 'package:recasa/screens/recasa/recasa_page.dart';
 import 'package:recasa/utils/app_colors.dart';
 import 'package:recasa/utils/app_extras.dart';
@@ -74,6 +75,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         style: AppStyles.appBarStyle,
       ),
       actions: [
+        const MarketplaceButton(),
         const AppBarRecasaButton(),
         AppBarWalletAddress(address: address),
       ],
@@ -117,13 +119,13 @@ class MarketplaceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        AppExtras.push(context, const RecasaNFTPage());
+        AppExtras.push(context, const MarketplaceView());
       },
       child: Center(
         child: Container(
           margin: const EdgeInsets.only(right: 22),
           child: Text(
-            AppStrings.recasaNFTs,
+            AppStrings.marketplace,
             style: AppStyles.linkTextStyleBold,
           ),
         ),
