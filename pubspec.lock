@@ -141,6 +141,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.16.0"
+<<<<<<< Updated upstream
   console_mixin:
     dependency: transitive
     description:
@@ -162,6 +163,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.2"
+=======
+>>>>>>> Stashed changes
   cupertino_icons:
     dependency: "direct main"
     description:
@@ -204,6 +207,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.3.0"
+<<<<<<< Updated upstream
   ffi:
     dependency: transitive
     description:
@@ -246,6 +250,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.1"
+=======
+>>>>>>> Stashed changes
   flutter:
     dependency: "direct main"
     description: flutter
@@ -401,6 +407,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.8.1"
+<<<<<<< Updated upstream
   path_provider:
     dependency: transitive
     description:
@@ -499,6 +506,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+=======
+>>>>>>> Stashed changes
   sky_engine:
     dependency: transitive
     description: flutter
@@ -553,6 +562,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.9"
+<<<<<<< Updated upstream
   typed_data:
     dependency: transitive
     description:
@@ -623,6 +633,8 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "3.0.6"
+=======
+>>>>>>> Stashed changes
   vector_math:
     dependency: transitive
     description:
@@ -630,6 +642,7 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.2"
+<<<<<<< Updated upstream
   watcher:
     dependency: transitive
     description:
@@ -675,3 +688,7 @@ packages:
 sdks:
   dart: ">=2.17.0 <3.0.0"
   flutter: ">=3.0.0"
+=======
+sdks:
+  dart: ">=2.17.0-0 <3.0.0"
+>>>>>>> Stashed changes
